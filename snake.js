@@ -1,11 +1,11 @@
 let Snake=function (width,height) {
-    this.x=0;
-    this.y=0;
+    this.x=10;
+    this.y=10;
     this.width=width;
     this.height=height;
     this.total=0;
     this.tail=[];
-
+    this.score=0;
     this.xSpeed=10;
     this.ySpeed=0;
 
@@ -28,18 +28,23 @@ let Snake=function (width,height) {
             x:this.x,
             y:this.y
         }
-        // if (this.x > cavas.width){
-        //     this.x=0;
-        // }
-        // if (this.y < cavas.height){
-        //     this.y=0;
-        // }
-        // if (this.x < 0){
-        //     this.x = cavas.width;
-        // }
-        // if (this.y<0){
-        //     this.y = cavas.height;
-        // }
+
+    }
+    //this function is going wrong,need to check again
+    this.hitWall = function () {
+        if (this.x === cavas.width-1 || this.y === cavas.height-1 || this.x === 0 || this.y === 0) {
+            return true;
+        }
+    }
+    //this function is going wrong,need to check again
+    this.hitItseft=function () {
+        for (let i=1;i<this.tail.length;i++){
+            if (this.tail[0].x === this.tail[i].x && this.tail[0].y===this.tail[i].y){
+                return true;
+            }
+        }
+        return false;
+
     }
 
     this.changeDirection=function (direction) {
@@ -68,6 +73,7 @@ let Snake=function (width,height) {
             this.y < food.y + food.height &&
             this.y + this.height > food.y) {
             this.total++;
+            this.score++;
             return true;
         }
         return false;
