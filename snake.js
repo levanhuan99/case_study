@@ -10,7 +10,7 @@ let Snake=function (width,height) {
     this.ySpeed=0;
 
     this.draw=function () {
-        ctx.fillStyle="#FFFFFF";
+        ctx.fillStyle="#169EE6";
         for (let i=0;i<this.tail.length;i++){
 
             ctx.fillRect(this.tail[i].x, this.tail[i].y, this.width,this.height);
@@ -18,9 +18,8 @@ let Snake=function (width,height) {
         ctx.fillRect(this.x,this.y,this.width,this.height);
     }
 
-    this.update=function () {
-        this.x+= this.xSpeed;
-        this.y+= this.ySpeed;
+    this.update = function () {
+
         for (let i=0;i<this.tail.length-1;i++){
             this.tail[i]=this.tail[i+1];
         }
@@ -28,48 +27,68 @@ let Snake=function (width,height) {
             x:this.x,
             y:this.y
         }
+        this.x+= this.xSpeed;
+        this.y+= this.ySpeed;
 
     }
-    //this function is going wrong,need to check again
-    this.hitWall = function () {
-        if (this.x === cavas.width-1 || this.y === cavas.height-1 || this.x === 0 || this.y === 0) {
-            return true;
-        }
-    }
-    //this function is going wrong,need to check again
-    this.hitItseft=function () {
-        for (let i=1;i<this.tail.length;i++){
-            if (this.tail[0].x === this.tail[i].x && this.tail[0].y===this.tail[i].y){
-                return true;
+    this.hitTail=function () {
+        for (let i=0;i<this.tail.length;i++){
+            if (this.x < this.tail[i].x +  this.tail[i].width &&
+                this.x + this.width >  this.tail[i].x &&
+                this.y <  this.tail[i].y +  this.tail[i].height &&
+                this.y + this.height >  this.tail[i].y){
+                console.log("hit tail");
             }
         }
-        return false;
-
     }
 
+    this.hitWall=function () {
+        if (snake.x===300||snake.y===300||snake.x===-10||snake.y===-10) {
+            return true
+        }
+        return false;
+    }
+
+
+
+    let flag;
     this.changeDirection=function (direction) {
-        switch (direction) {
-            case "Up":
+        if (direction === "Up" && flag!=="down" ){
+            flag ="up";
+            if (flag==="up"){
                 this.xSpeed= 0;
                 this.ySpeed= -10;
-                break;
-            case "Down":
-                this.xSpeed= 0;
-                this.ySpeed= 10;
-                break;
-            case "Right":
+            }
+        }
+
+        else if (direction === "Down" && flag !== "up") {
+            flag = "down";
+            if (flag==="down"){
+                this.xSpeed = 0;
+                this.ySpeed = 10;
+            }
+        }
+
+        else if (direction === "Right" && flag !== "left"){
+            flag ="right";
+            if (flag==="right"){
                 this.xSpeed= 10;
                 this.ySpeed= 0;
-                break;
-            case "Left":
+            }
+        }
+
+        else if (direction === "Left" && flag !== "right"){
+            flag ="left";
+            if (flag==="left"){
                 this.xSpeed= - 10;
                 this.ySpeed= 0;
-                break;
+            }
         }
     }
+
     this.eat=function (food) {
         if ( this.x < food.x + food.width &&
-            this.x + snake.width > food.x &&
+            this.x + this.width > food.x &&
             this.y < food.y + food.height &&
             this.y + this.height > food.y) {
             this.total++;
